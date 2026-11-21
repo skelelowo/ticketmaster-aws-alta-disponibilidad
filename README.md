@@ -70,6 +70,58 @@ sudo rm /var/www/html/index.html
 5. Crear una AMI de la instancia y lanzar un segundo servidor desde ella.
 6. Crear el grupo de destino, registrar las dos instancias y crear el Application Load Balancer con listener HTTPS (certificado importado a ACM) y WAF.
 
+## Capturas del despliegue
+
+Capturas de la consola de AWS durante la prueba, recortadas para no mostrar credenciales ni datos de la cuenta.
+
+**1. Creación de la instancia EC2: nombre e imagen (Ubuntu Server).**
+
+![Creación de la instancia EC2: nombre e imagen (Ubuntu Server).](img/01-ec2-nombre-y-ami.png)
+
+**2. Tipo de instancia, par de claves, red y security group.**
+
+![Tipo de instancia, par de claves, red y security group.](img/02-ec2-tipo-red-sg.png)
+
+**3. Creación de la base de datos RDS (MySQL) con las credenciales en Secrets Manager.**
+
+![Creación de la base de datos RDS (MySQL) con las credenciales en Secrets Manager.](img/03-rds-credenciales.png)
+
+**4. Conexión de la base de datos con la instancia EC2.**
+
+![Conexión de la base de datos con la instancia EC2.](img/04-rds-conectividad-a.png)
+
+**5. Base en subred privada, sin acceso público y con su propio security group.**
+
+![Base en subred privada, sin acceso público y con su propio security group.](img/05-rds-conectividad-b.png)
+
+**6. Registro CNAME en ClouDNS hacia la instancia.**
+
+![Registro CNAME en ClouDNS hacia la instancia.](img/06-dns-cname.png)
+
+**7. Emisión del certificado con Certbot.**
+
+![Emisión del certificado con Certbot.](img/07-certbot.png)
+
+**8. El sitio con HTTPS activo.**
+
+![El sitio con HTTPS activo.](img/08-https-candado.png)
+
+**9. Creación de la AMI para clonar el servidor.**
+
+![Creación de la AMI para clonar el servidor.](img/09-ami-instancia.png)
+
+**10. Balanceador de carga: zonas de disponibilidad y subredes.**
+
+![Balanceador de carga: zonas de disponibilidad y subredes.](img/10-alb-zonas.png)
+
+**11. Listener HTTPS 443 y security group del balanceador.**
+
+![Listener HTTPS 443 y security group del balanceador.](img/11-alb-listener-sg.png)
+
+**12. Grupo de destino con las 2 instancias en buen estado (Healthy), en us-east-1a y us-east-1e.**
+
+![Grupo de destino con las 2 instancias en buen estado (Healthy), en us-east-1a y us-east-1e.](img/12-grupo-destino-sano.png)
+
 ## Mi aporte
 
 Hice el trabajo de principio a fin: elegí y dimensioné los recursos, levanté la instancia EC2 y la base de datos RDS, instalé Apache, PHP y WordPress, configuré el DNS y el certificado HTTPS, creé la AMI para clonar el servidor y armé el balanceador de carga con el grupo de destino. También redacté el informe.
@@ -84,4 +136,4 @@ Hice el trabajo de principio a fin: elegí y dimensioné los recursos, levanté 
 
 ## Nota sobre credenciales
 
-No incluyo las capturas de la consola del informe porque muestran credenciales y datos de la cuenta de AWS. En este repositorio no hay contraseñas, claves ni identificadores de la cuenta.
+Las capturas están recortadas. No publico las que mostraban contraseñas, claves del certificado o el identificador de la cuenta de AWS, y en este repositorio no hay ninguna credencial.
